@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morigin - EduCommerce Next Level</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+        .unipin-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(34, 197, 94, 0.2); }
+        .card:active { transform: scale(0.97); }
+        #moringa-img { transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- NAV -->
+    <nav class="fixed w-full z-[60] bg-white/90 backdrop-blur-md shadow-sm p-4 flex justify-between items-center px-6">
+        <h1 class="text-2xl font-bold text-green-600 tracking-tighter">MORIGIN<span class="text-slate-400 text-sm">.ID</span></h1>
+        <div class="flex items-center space-x-6">
+            <div class="hidden md:flex space-x-6 text-sm font-medium uppercase">
+                <a href="#home" class="hover:text-green-600">Home</a>
+                <a href="#katalog" class="hover:text-green-600">Katalog</a>
+                <a href="#edukasi" class="hover:text-green-600">Edukasi</a>
+            </div>
+            <button onclick="openCart()" class="relative bg-green-50 p-2 rounded-full text-green-600">
+                <i class="fa fa-shopping-cart text-xl"></i>
+                <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1.5 rounded-full font-bold">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- SECTION 1: HERO & ANIMASI PERTUMBUHAN -->
+    <section id="home" class="relative min-h-screen flex items-center pt-20 px-6">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+            <div>
+                <h1 class="text-5xl font-bold leading-tight">Mengenal <span class="text-green-600 text-6xl">Kelor</span></h1>
+                <p class="text-slate-600 mt-6 text-lg italic border-l-4 border-green-500 pl-4">
+                    "Dari bibit kecil hingga menjadi pohon ajaib penuh nutrisi."
+                </p>
+                <p class="mt-4 text-slate-500">Morigin membawa edukasi dan kualitas produk kelor langsung ke tangan Tuan dengan sistem digital yang modern.</p>
+                <div class="mt-8 flex space-x-4">
+                    <a href="#katalog" class="bg-green-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-green-200">Belanja</a>
+                    <a href="#edukasi" class="bg-white border border-slate-200 px-8 py-3 rounded-xl font-bold hover:bg-slate-50">Manfaat</a>
+                </div>
+            </div>
+            <div class="flex justify-center flex-col items-center">
+                <div id="tree-container" class="relative">
+                    <div class="absolute inset-0 bg-green-200 blur-3xl opacity-20 rounded-full"></div>
+                    <img id="moringa-img" src="https://cdn-icons-png.flaticon.com/512/628/628283.png" class="w-64 h-64 md:w-80 md:h-80 object-contain relative z-10">
+                </div>
+                <p id="stage-text" class="mt-6 font-bold text-green-600 uppercase tracking-widest text-sm">Tahap 1: Bibit Unggul</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: KATALOG & REKOMENDASI -->
+    <section id="katalog" class="py-20 px-6 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-10">
+                <h2 class="text-3xl font-bold">Katalog Produk</h2>
+                <!-- REKOMENDASI BOX -->
+                <div id="recommendation" class="mt-4 md:mt-0 bg-green-50 text-green-700 px-6 py-3 rounded-2xl text-sm font-medium border border-green-100 flex items-center">
+                    <i class="fa-solid fa-robot mr-3 animate-pulse"></i> Belum ada data, coba beli dulu 😊
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Produk 1 -->
+                <div class="unipin-card card border rounded-3xl p-5 cursor-pointer flex flex-col" onclick="addToCart('Morigin',45000)">
+                    <div class="bg-slate-50 rounded-2xl h-40 flex items-center justify-center mb-4"><img src="https://cdn-icons-png.flaticon.com/512/2619/2619524.png" class="w-20"></div>
+                    <h3 class="font-bold">Morigin</h3>
+                    <p class="text-green-600 font-bold mt-auto">Rp 45.000</p>
+                    <button class="mt-3 w-full bg-slate-100 py-2 rounded-xl text-xs font-bold hover:bg-green-600 hover:text-white transition">TAMBAH</button>
+                </div>
+                <!-- Produk 2 -->
+                <div class="unipin-card card border rounded-3xl p-5 cursor-pointer flex flex-col" onclick="addToCart('Morisweet',35000)">
+                    <div class="bg-slate-50 rounded-2xl h-40 flex items-center justify-center mb-4"><img src="https://cdn-icons-png.flaticon.com/512/3058/3058963.png" class="w-20"></div>
+                    <h3 class="font-bold">Morisweet</h3>
+                    <p class="text-green-600 font-bold mt-auto">Rp 35.000</p>
+                    <button class="mt-3 w-full bg-slate-100 py-2 rounded-xl text-xs font-bold hover:bg-green-600 hover:text-white transition">TAMBAH</button>
+                </div>
+                <!-- Produk 3 -->
+                <div class="unipin-card card border rounded-3xl p-5 cursor-pointer flex flex-col" onclick="addToCart('Stik Mori',20000)">
+                    <div class="bg-slate-50 rounded-2xl h-40 flex items-center justify-center mb-4"><img src="https://cdn-icons-png.flaticon.com/512/2553/2553642.png" class="w-20"></div>
+                    <h3 class="font-bold">Stik Mori</h3>
+                    <p class="text-green-600 font-bold mt-auto">Rp 20.000</p>
+                    <button class="mt-3 w-full bg-slate-100 py-2 rounded-xl text-xs font-bold hover:bg-green-600 hover:text-white transition">TAMBAH</button>
+                </div>
+                <!-- Produk 4 -->
+                <div class="unipin-card card border rounded-3xl p-5 cursor-pointer flex flex-col" onclick="addToCart('MoriMie',15000)">
+                    <div class="bg-slate-50 rounded-2xl h-40 flex items-center justify-center mb-4"><img src="https://cdn-icons-png.flaticon.com/512/2718/2718224.png" class="w-20"></div>
+                    <h3 class="font-bold">MoriMie</h3>
+                    <p class="text-green-600 font-bold mt-auto">Rp 15.000</p>
+                    <button class="mt-3 w-full bg-slate-100 py-2 rounded-xl text-xs font-bold hover:bg-green-600 hover:text-white transition">TAMBAH</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- SECTION 3: EDUKASI DENGAN VISUAL MENARIK -->
+<section id="edukasi" class="py-24 bg-slate-50 px-6">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-slate-800">Literasi Nutrisi Kelor</h2>
+            <p class="text-slate-500 mt-2">Mengapa Tuan harus mulai mengonsumsi Morigin hari ini?</p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Berita 1: WHO -->
+            <a href="https://www.who.int/news-room/fact-sheets/detail/malnutrition" target="_blank" class="bg-white rounded-[2.5rem] border border-slate-100 hover:border-green-500 hover:shadow-2xl transition-all flex flex-col h-full group overflow-hidden">
+                <!-- Foto Header -->
+                <div class="h-48 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1515023115689-589c33041d3c?auto=format&fit=crop&q=80&w=600" alt="Moringa Leaf" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    <span class="absolute bottom-4 left-6 text-white font-bold text-xs bg-blue-600 px-3 py-1 rounded-full uppercase">Global News</span>
+                </div>
+                <div class="p-8">
+                    <h4 class="text-xl font-bold mb-3">Solusi Malnutrisi Dunia</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        WHO mengkategorikan kelor sebagai <i>"Miracle Tree"</i>. Kandungan proteinnya mengungguli yogurt dan kaliumnya jauh di atas pisang.
+                    </p>
+                    <div class="mt-6 pt-4 border-t border-slate-50 flex items-center text-green-600 text-xs font-bold uppercase tracking-wider">
+                        Baca Selengkapnya <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Berita 2: KEMENKES -->
+            <a href="https://ayosehat.kemkes.go.id/kandungan-gizi-dan-manfaat-daun-kelor-bagi-kesehatan" target="_blank" class="bg-white rounded-[2.5rem] border border-slate-100 hover:border-green-500 hover:shadow-2xl transition-all flex flex-col h-full group overflow-hidden">
+                <!-- Foto Header -->
+                <div class="h-48 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=600" alt="Healthy Food" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    <span class="absolute bottom-4 left-6 text-white font-bold text-xs bg-red-600 px-3 py-1 rounded-full uppercase">Kemenkes RI</span>
+                </div>
+                <div class="p-8">
+                    <h4 class="text-xl font-bold mb-3">Benteng Imunitas Tubuh</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        Kemenkes RI merilis bahwa antioksidan Quercetin pada kelor sangat efektif menangkal radikal bebas dan menjaga tekanan darah Tuan tetap stabil.
+                    </p>
+                    <div class="mt-6 pt-4 border-t border-slate-50 flex items-center text-green-600 text-xs font-bold uppercase tracking-wider">
+                        Cek Fakta Kesehatan <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Berita 3: PENELITIAN -->
+            <a href="https://scholar.google.com/scholar?q=moringa+oleifera+benefits" target="_blank" class="bg-white rounded-[2.5rem] border border-slate-100 hover:border-green-500 hover:shadow-2xl transition-all flex flex-col h-full group overflow-hidden">
+                <!-- Foto Header -->
+                <div class="h-48 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1466632311177-0d582316ac85?auto=format&fit=crop&q=80&w=600" alt="Lab Research" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    <span class="absolute bottom-4 left-6 text-white font-bold text-xs bg-green-600 px-3 py-1 rounded-full uppercase">Clinical Study</span>
+                </div>
+                <div class="p-8">
+                    <h4 class="text-xl font-bold mb-3">Efek Alami Anti-Diabetes</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        Banyak jurnal internasional membuktikan bahwa konsumsi rutin produk olahan kelor mampu menstabilkan kadar glukosa darah secara signifikan.
+                    </p>
+                    <div class="mt-6 pt-4 border-t border-slate-50 flex items-center text-green-600 text-xs font-bold uppercase tracking-wider">
+                        Lihat Jurnal Ilmiah <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+    <!-- CART MODAL -->
+    <div id="cart-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] hidden flex justify-center items-center p-6">
+        <div class="bg-white w-full max-w-md p-8 rounded-[2.5rem] shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="font-bold text-2xl">Keranjang Belanja</h2>
+                <button onclick="closeCart()" class="text-slate-400 hover:text-red-500"><i class="fa fa-times text-xl"></i></button>
+            </div>
+            
+            <div id="cart-items" class="max-h-60 overflow-y-auto mb-6"></div>
+
+            <div class="border-t pt-4">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-slate-500">Total Pembayaran:</span>
+                    <span id="total" class="font-bold text-2xl text-green-600">Rp 0</span>
+                </div>
+                
+                <!-- METODE PEMBAYARAN WAJIB QRIS -->
+                <div class="bg-slate-50 p-4 rounded-2xl border-2 border-green-500 mb-6 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_QRIS.svg" class="h-4 mr-3">
+                        <span class="text-xs font-bold uppercase">Metode: QRIS Dinamis</span>
+                    </div>
+                    <i class="fa-solid fa-circle-check text-green-600"></i>
+                </div>
+
+                <button onclick="checkout()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold hover:bg-green-700 transition">
+                    Checkout & Bayar Sekarang
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDER STATUS (POPUP) -->
+    <div id="order-status" class="fixed bottom-10 right-10 bg-white shadow-2xl p-6 rounded-2xl border-l-8 border-green-500 hidden z-[70] animate-bounce">
+        <div class="flex items-center">
+            <i class="fa-solid fa-truck-fast text-green-600 mr-4 text-2xl"></i>
+            <div>
+                <p class="text-xs text-slate-400 font-bold uppercase">Status Pesanan</p>
+                <span id="status-text" class="font-bold text-slate-800 tracking-tight">Diproses...</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        // 1. ANIMASI PERTUMBUHAN POHON (SCROLL)
+        window.addEventListener('scroll', () => {
+            const treeImg = document.getElementById('moringa-img');
+            const stageText = document.getElementById('stage-text');
+            const scrollY = window.scrollY;
+
+            if (scrollY < 200) {
+                treeImg.src = "https://cdn-icons-png.flaticon.com/512/628/628283.png"; // Bibit
+                stageText.innerText = "Tahap 1: Bibit Unggul";
+                treeImg.style.transform = `scale(1)`;
+            } else if (scrollY < 500) {
+                treeImg.src = "https://cdn-icons-png.flaticon.com/512/892/892926.png"; // Tunas
+                stageText.innerText = "Tahap 2: Tunas Harapan";
+                treeImg.style.transform = `scale(1.2) rotate(5deg)`;
+            } else {
+                treeImg.src = "https://cdn-icons-png.flaticon.com/512/489/489969.png"; // Pohon
+                stageText.innerText = "Tahap 3: Pohon Keajaiban";
+                treeImg.style.transform = `scale(1.5) rotate(0deg)`;
+            }
+        });
+
+        // 2. SISTEM KERANJANG
+        function saveCart(){
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCartCount();
+            renderCart();
+            recommendation();
+        }
+
+        function addToCart(name, price){
+            let item = cart.find(i => i.name === name);
+            if(item){
+                item.qty++;
+            }else{
+                cart.push({name, price, qty:1});
+            }
+            saveCart();
+            // Efek visual saat tambah
+            const btn = event.currentTarget;
+            btn.classList.add('bg-green-100');
+            setTimeout(()=> btn.classList.remove('bg-green-100'), 200);
+        }
+
+        function updateCartCount(){
+            document.getElementById("cart-count").innerText = cart.reduce((a,b)=>a+b.qty,0);
+        }
+
+        function openCart(){
+            document.getElementById("cart-modal").classList.remove("hidden");
+            renderCart();
+        }
+
+        function closeCart(){
+            document.getElementById("cart-modal").classList.add("hidden");
+        }
+
+        function renderCart(){
+            let el = document.getElementById("cart-items");
+            let total = 0;
+            el.innerHTML = "";
+
+            if(cart.length === 0){
+                el.innerHTML = "<p class='text-center text-slate-400 py-10'>Wah, keranjang masih kosong nih Tuan.</p>";
+            }
+
+            cart.forEach((item,index)=>{
+                total += item.price * item.qty;
+                el.innerHTML += `
+                    <div class="flex justify-between items-center mb-4 bg-slate-50 p-4 rounded-2xl">
+                        <div>
+                            <p class="font-bold text-slate-800">${item.name}</p>
+                            <p class="text-xs text-slate-400">Qty: ${item.qty} x Rp ${item.price.toLocaleString('id-ID')}</p>
+                        </div>
+                        <button onclick="removeItem(${index})" class="text-red-400 hover:text-red-600"><i class="fa fa-trash-can"></i></button>
+                    </div>
+                `;
+            });
+
+            document.getElementById("total").innerText = "Rp " + total.toLocaleString("id-ID");
+        }
+
+        function removeItem(i){
+            cart.splice(i,1);
+            saveCart();
+        }
+
+        // 3. CHECKOUT DENGAN INTERAKSI SUKSES
+        function checkout(){
+            if(cart.length === 0) return alert("Beli barang dulu Tuan!");
+            
+            closeCart();
+            let status = document.getElementById("order-status");
+            status.classList.remove("hidden");
+            let text = document.getElementById("status-text");
+
+            // Alur tracking order Tuan
+            text.innerText = "Validasi QRIS...";
+            setTimeout(()=> text.innerText="Pembayaran Berhasil! ✅", 2000);
+            setTimeout(()=> text.innerText="Dikemas 📦", 4000);
+            setTimeout(()=> text.innerText="Dikirim Kurir 🚚", 6000);
+            setTimeout(()=> {
+                text.innerText="Selesai! Terima kasih Tuan.";
+                setTimeout(()=> status.classList.add('hidden'), 3000);
+            }, 8000);
+
+            cart = [];
+            saveCart();
+        }
+
+        // 4. REKOMENDASI PINTAR
+        function recommendation(){
+            let el = document.getElementById("recommendation");
+            if(cart.length === 0){
+                el.innerHTML = `<i class="fa-solid fa-robot mr-3"></i> Belum ada data, coba beli dulu 😊`;
+                return;
+            }
+            let last = cart[cart.length-1].name;
+            let text = "";
+            if(last === "Morigin") text = "Kombinasi dengan Morisweet agar lebih nikmat!";
+            else if(last === "MoriMie") text = "Tambah Stik Mori biar makin kriuk!";
+            else text = "Tuan punya selera yang sangat sehat!";
+            
+            el.innerHTML = `<i class="fa-solid fa-robot mr-3 animate-bounce"></i> ${text}`;
+        }
+
+        // Init
+        updateCartCount();
+        renderCart();
+        recommendation();
+    </script>
+
+</body>
+</html>

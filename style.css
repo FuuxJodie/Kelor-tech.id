@@ -1,0 +1,146 @@
+/* 
+   MORIGIN NEXT LEVEL - STYLE SHEET
+   Dibuat oleh: BABU JODIE 
+*/
+
+/* 1. VARIABEL WARNA (Palet Hijau Sehat & Emas UniPin) */
+:root {
+    --mori-green: #22c55e;
+    --mori-dark: #166534;
+    --mori-light: #f0fdf4;
+    --unipin-gold: #fbbf24;
+    --bg-slate: #f8fafc;
+}
+
+/* 2. RESET & DASAR */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-slate);
+    color: #1e293b;
+    overflow-x: hidden;
+}
+
+/* 3. ANIMASI PERTUMBUHAN POHON (The Hero Section) */
+#moringa-img {
+    filter: drop-shadow(0 20px 40px rgba(34, 197, 94, 0.2));
+    transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+}
+
+/* Efek bergoyang pelan seolah tertiup angin */
+@keyframes windSway {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(2deg); }
+    100% { transform: rotate(0deg); }
+}
+
+#moringa-img:hover {
+    animation: windSway 2s ease-in-out infinite;
+}
+
+/* 4. KARTU PRODUK (UniPin Aesthetic) */
+.unipin-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.unipin-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 4px;
+    background: var(--mori-green);
+    transition: width 0.3s ease;
+}
+
+.unipin-card:hover {
+    border-color: var(--mori-green);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 30px -10px rgba(34, 197, 94, 0.3);
+}
+
+.unipin-card:hover::after {
+    width: 100%;
+}
+
+.unipin-card:active {
+    transform: scale(0.96);
+}
+
+/* 5. MODAL & OVERLAY */
+#cart-modal {
+    backdrop-filter: blur(8px);
+    transition: opacity 0.3s ease;
+}
+
+#cart-modal > div {
+    animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* 6. STATUS ORDER POPUP */
+#order-status {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    border-left: 6px solid var(--mori-green);
+    animation: bounceIn 0.5s ease;
+}
+
+@keyframes bounceIn {
+    0% { transform: translateX(100px); opacity: 0; }
+    60% { transform: translateX(-10px); }
+    100% { transform: translateX(0); opacity: 1; }
+}
+
+/* 7. REKOMENDASI BOX (Efek Glow) */
+#recommendation {
+    position: relative;
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.1);
+}
+
+#recommendation i {
+    color: var(--mori-green);
+}
+
+/* 8. CUSTOM SCROLLBAR (Biar lebih rapi) */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-slate);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--mori-green);
+}
+
+/* 9. TOMBOL UTAMA */
+.btn-mori {
+    background: var(--mori-green);
+    box-shadow: 0 4px 14px 0 rgba(34, 197, 94, 0.39);
+    transition: all 0.2s ease;
+}
+
+.btn-mori:hover {
+    background: var(--mori-dark);
+    transform: scale(1.02);
+}
