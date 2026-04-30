@@ -1,18 +1,18 @@
 /* 
-   MORIGIN NEXT LEVEL - STYLE SHEET
-   Dibuat oleh: BABU JODIE 
+   MORIGIN NEXT LEVEL - ALL-IN-ONE INTERACTIVE STYLE
+   Dibuat khusus untuk Tuan oleh BABU JODIE 
 */
 
-/* 1. VARIABEL WARNA (Palet Hijau Sehat & Emas UniPin) */
 :root {
-    --mori-green: #22c55e;
-    --mori-dark: #166534;
-    --mori-light: #f0fdf4;
-    --unipin-gold: #fbbf24;
-    --bg-slate: #f8fafc;
+    --mori-green: #064e3b;
+    --mori-accent: #22c55e;
+    --mori-light: #f1f5f1;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --white: #ffffff;
 }
 
-/* 2. RESET & DASAR */
+/* --- 1. RESET & BASE --- */
 * {
     margin: 0;
     padding: 0;
@@ -20,127 +20,187 @@
 }
 
 body {
-    background-color: var(--bg-slate);
+    background-color: #f8fafc;
     color: #1e293b;
+    font-family: 'Poppins', sans-serif;
     overflow-x: hidden;
 }
 
-/* 3. ANIMASI PERTUMBUHAN POHON (The Hero Section) */
-#moringa-img {
-    filter: drop-shadow(0 20px 40px rgba(34, 197, 94, 0.2));
-    transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-    cursor: pointer;
+/* --- 2. ANIMASI MESIN (KEYFRAMES) --- */
+@keyframes float-slow {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-40px) rotate(20deg); }
 }
 
-/* Efek bergoyang pelan seolah tertiup angin */
-@keyframes windSway {
-    0% { transform: rotate(0deg); }
-    50% { transform: rotate(2deg); }
-    100% { transform: rotate(0deg); }
+@keyframes float-mid {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(30px, -20px) rotate(-15deg); }
 }
 
-#moringa-img:hover {
-    animation: windSway 2s ease-in-out infinite;
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }
 
-/* 4. KARTU PRODUK (UniPin Aesthetic) */
-.unipin-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+.animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
+.animate-float-mid { animation: float-mid 6s ease-in-out infinite; }
+
+/* --- 3. NAVIGASI & HERO --- */
+nav {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 100%);
+    transition: all 0.4s ease;
+}
+
+#home {
     position: relative;
-    overflow: hidden;
+    height: 650px !important;
+    padding-top: 4rem;
 }
 
-.unipin-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 4px;
-    background: var(--mori-green);
-    transition: width 0.3s ease;
+#home h1 {
+    text-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* --- 4. ULTRA-SMOOTH REVEAL ON SCROLL --- */
+.reveal {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+    transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1); /* Apple-style Bezier */
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* --- 5. SMART RECOMMENDATION BOX --- */
+#recommendation {
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: linear-gradient(90deg, #f0fdf4 0%, #dcfce7 50%, #f0fdf4 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite linear;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+/* --- 6. GLASSMORPHISM & KARTU (UNIPIN STYLE) --- */
+.unipin-card {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 2rem;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .unipin-card:hover {
-    border-color: var(--mori-green);
-    transform: translateY(-8px);
-    box-shadow: 0 20px 30px -10px rgba(34, 197, 94, 0.3);
+    border-color: var(--mori-accent) !important;
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(34, 197, 94, 0.3);
+    background: rgba(255, 255, 255, 0.9) !important;
 }
 
-.unipin-card:hover::after {
-    width: 100%;
+/* --- 7. QRIS MODAL & UI SIMULATION --- */
+#qris-modal {
+    transition: all 0.5s ease-in-out;
 }
 
-.unipin-card:active {
-    transform: scale(0.96);
+#qris-modal:not(.hidden) #qris-container {
+    transform: scale(1);
 }
 
-/* 5. MODAL & OVERLAY */
-#cart-modal {
-    backdrop-filter: blur(8px);
-    transition: opacity 0.3s ease;
+#qris-loader {
+    backdrop-filter: blur(4px);
+    transition: opacity 1s ease;
 }
 
-#cart-modal > div {
-    animation: slideUp 0.4s ease-out;
-}
-
-@keyframes slideUp {
-    from { transform: translateY(50px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
-/* 6. STATUS ORDER POPUP */
-#order-status {
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-    border-left: 6px solid var(--mori-green);
-    animation: bounceIn 0.5s ease;
-}
-
-@keyframes bounceIn {
-    0% { transform: translateX(100px); opacity: 0; }
-    60% { transform: translateX(-10px); }
-    100% { transform: translateX(0); opacity: 1; }
-}
-
-/* 7. REKOMENDASI BOX (Efek Glow) */
-#recommendation {
+/* --- 8. EDUKASI SECTION --- */
+#edukasi {
     position: relative;
-    box-shadow: 0 0 15px rgba(34, 197, 94, 0.1);
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
 }
 
-#recommendation i {
-    color: var(--mori-green);
+#edukasi a {
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* 8. CUSTOM SCROLLBAR (Biar lebih rapi) */
+#edukasi a:hover {
+    transform: translateY(-8px);
+}
+
+/* --- 9. SCROLLBAR & MODAL CUSTOM --- */
+#cart-modal .bg-white {
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.95);
+}
+
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--bg-slate);
+    background: #f1f1f1;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: linear-gradient(to bottom, var(--mori-accent), #16a34a);
     border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: var(--mori-green);
+/* --- 10. TAMBAHAN FITUR PREMIUM TUAN --- */
+
+/* ===== SECTION TRANSITION ===== */
+.section {
+    opacity: 0;
+    transform: translateY(60px);
+    transition: all 0.8s ease;
 }
 
-/* 9. TOMBOL UTAMA */
-.btn-mori {
-    background: var(--mori-green);
-    box-shadow: 0 4px 14px 0 rgba(34, 197, 94, 0.39);
-    transition: all 0.2s ease;
+.section.show {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-.btn-mori:hover {
-    background: var(--mori-dark);
-    transform: scale(1.02);
+/* ===== HOVER CARD PREMIUM ===== */
+.card-hover {
+    transition: all 0.4s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* ===== GRADIENT TEXT ===== */
+.gradient-text {
+    background: linear-gradient(to right, #22c55e, #16a34a);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+/* ===== CTA INPUT ===== */
+input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #22c55e;
+}
+
+/* --- 11. RESPONSIVE & KEYFRAMES --- */
+@media (max-width: 768px) {
+    #home { height: auto !important; padding-bottom: 4rem; }
+    .unipin-card { padding: 1.5rem; }
+}
+
+#menu-dropdown {
+    animation: fadeSlide 0.3s ease;
+}
+
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

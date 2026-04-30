@@ -1,81 +1,327 @@
 /* 
-   LOGIKA INTERAKSI MORIGIN
+   LOGIKA INTERAKSI MORIGIN - EDUCOMMERCE NEXT LEVEL
+   Update: Mandatory Login on Add-to-Cart
    Dibuat khusus untuk Tuan oleh BABU JODIE 
 */
 
 document.addEventListener('DOMContentLoaded', () => {
+    // --- 1. INISIALISASI DATA & STATE ---
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let isLoginMode = true; 
     const treeImg = document.getElementById('moringa-img');
-    const stageText = document.getElementById('stage-text');
-    const treeContainer = document.getElementById('tree-stage');
+    const cartModal = document.getElementById('cart-modal');
+    const qrisModal = document.getElementById('qris-modal');
+    const authModal = document.getElementById('auth-modal');
+    const orderStatus = document.getElementById('order-status');
+    let qrisCountdown;
 
-    // 1. FUNGSI UTAMA: ANIMASI PERTUMBUHAN (SCROLL-BASED)
-    window.addEventListener('scroll', () => {
-        // Menghitung persentase scroll pada section Hero saja (agar lebih sensitif)
-        const scrollY = window.scrollY;
-        const triggerPoint = 400; // Titik di mana pohon sudah harus besar
-        
-        let scale = 1 + (scrollY / 500); // Pohon membesar perlahan
-        let opacity = 1;
-        
-        // Batas maksimal pembesaran
-        if (scale > 1.8) scale = 1.8;
+    // --- 2. AUTH SYSTEM LOGIC ---
+    
+    window.openAuth = function() {
+        authModal.classList.remove("hidden");
+        document.body.style.overflow = 'hidden';
+    };
 
-        // Logika Pergantian Tahap Pertumbuhan
-        if (scrollY < 150) {
-            // TAHAP 1: BIBIT
-            treeImg.src = "https://cdn-icons-png.flaticon.com/512/628/628283.png"; 
-            stageText.innerText = "Tahap 1: Bibit Unggul";
-            stageText.style.color = "#16a34a";
-        } 
-        else if (scrollY >= 150 && scrollY < 350) {
-            // TAHAP 2: TUNAS (Ada efek transisi halus)
-            treeImg.src = "https://cdn-icons-png.flaticon.com/512/892/892926.png";
-            stageText.innerText = "Tahap 2: Tunas Harapan";
-            stageText.style.color = "#22c55e";
-        } 
-        else if (scrollY >= 350) {
-            // TAHAP 3: POHON RINDANG
-            treeImg.src = "https://cdn-icons-png.flaticon.com/512/489/489969.png";
-            stageText.innerText = "Tahap 3: Pohon Keajaiban";
-            stageText.style.color = "#15803d";
-            treeImg.classList.add('pohon-berbuah'); // Menambahkan efek glow dari CSS
+    window.closeAuth = function() {
+        authModal.classList.add("hidden");
+        document.body.style.overflow = 'auto';
+    };
+
+    window.toggleAuth = function() {
+        isLoginMode = !isLoginMode;
+        document.getElementById("auth-title").innerText = isLoginMode ? "Login" : "Register";
+        document.querySelector("#auth-modal button[onclick='submitAuth()']").innerText = isLoginMode ? "Masuk" : "Daftar";
+        document.getElementById("toggle-text").innerText = isLoginMode ? "Belum punya akun?" : "Sudah punya akun?";
+    };
+
+    window.submitAuth = function() {
+        const username = document.getElementById("auth-username").value;
+        const password = document.getElementById("auth-password").value;
+
+        if (!username || !password) {
+            alert("Mohon lengkapi data Tuan!");
+            return;
         }
 
-        // Terapkan Transformasi Scale dan Rotasi tipis agar lebih dinamis
-        treeImg.style.transform = `scale(${scale}) rotate(${scrollY / 50}deg)`;
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+
+        if (isLoginMode) {
+            const user = users.find(u => u.username === username && u.password === password);
+            if (!user) {
+                alert("Username atau Password salah, Tuan.");
+                return;
+            }
+            localStorage.setItem("currentUser", JSON.stringify(user));
+            showStatus(`Selamat datang kembali, ${username}!`);
+        } else {
+            const exists = users.find(u => u.username === username);
+            if (exists) {
+                alert("Username sudah terdaftar!");
+                return;
+            }
+            users.push({ username, password });
+            localStorage.setItem("users", JSON.stringify(users));
+            alert("Akun berhasil dibuat! Silakan Login.");
+            toggleAuth();
+            return;
+        }
+
+        closeAuth();
+        updateUserUI();
+    };
+
+    window.updateUserUI = function() {
+        const user = JSON.parse(localStorage.getItem("currentUser"));
+        const btn = document.getElementById("user-btn");
+        if (!btn) return;
+
+        if (user) {
+            btn.innerText = user.username;
+            btn.onclick = logout;
+            btn.classList.add("bg-green-600", "text-white"); 
+        } else {
+            btn.innerText = "Login";
+            btn.onclick = openAuth;
+            btn.classList.remove("bg-green-600", "text-white");
+        }
+    };
+
+    window.logout = function() {
+        if(confirm("Tuan ingin keluar?")) {
+            localStorage.removeItem("currentUser");
+            showStatus("Logout berhasil.");
+            updateUserUI();
+        }
+    };
+
+    // --- 3. KERANJANG BELANJA DENGAN GERBANG LOGIN ---
+    
+    window.addToCart = function(name, price) {
+        const user = localStorage.getItem("currentUser");
+        
+        if (!user) {
+            alert("Silakan login terlebih dahulu untuk memasukkan produk ke keranjang, Tuan!");
+            openAuth();
+            return;
+        }
+
+        let item = cart.find(i => i.name === name);
+        if (item) {
+            item.qty++;
+        } else {
+            cart.push({ name, price, qty: 1 });
+        }
+        
+        saveCart();
+        renderCart();
+        updateCartCount();
+        showStatus(`Menambahkan ${name} ke keranjang...`);
+    };
+
+    window.updateCartCount = function() {
+        const count = cart.reduce((total, item) => total + item.qty, 0);
+        const countElement = document.getElementById("cart-count");
+        if (countElement) countElement.innerText = count;
+        updateRecommendation(); 
+    };
+
+    function saveCart() {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
+
+    function renderCart() {
+        const container = document.getElementById("cart-items");
+        const totalElement = document.getElementById("total");
+        if (!container) return;
+
+        container.innerHTML = "";
+        let total = 0;
+
+        cart.forEach((item, index) => {
+            total += item.price * item.qty;
+            container.innerHTML += `
+                <div class="flex justify-between items-center mb-4 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                    <div>
+                        <p class="font-bold text-sm text-slate-800">${item.name}</p>
+                        <p class="text-xs text-slate-500">${item.qty}x - Rp ${item.price.toLocaleString()}</p>
+                    </div>
+                    <button onclick="removeFromCart(${index})" class="text-red-400 hover:text-red-600 transition">
+                        <i class="fa fa-trash-can"></i>
+                    </button>
+                </div>
+            `;
+        });
+        totalElement.innerText = `Rp ${total.toLocaleString()}`;
+    }
+
+    window.removeFromCart = function(index) {
+        cart.splice(index, 1);
+        saveCart();
+        renderCart();
+        updateCartCount();
+    };
+
+    // --- 4. CHECKOUT & QRIS ---
+    
+    window.openCart = function() {
+        renderCart();
+        cartModal.classList.remove('hidden');
+    };
+
+    window.closeCart = function() {
+        cartModal.classList.add('hidden');
+    };
+
+    window.checkout = function() {
+        if (cart.length === 0) {
+            alert("Keranjang Tuan masih kosong!");
+            return;
+        }
+        
+        closeCart();
+        qrisModal.classList.remove('hidden');
+        
+        const loader = document.getElementById('qris-loader');
+        if (loader) {
+            loader.style.opacity = "1";
+            setTimeout(() => { 
+                loader.style.opacity = "0"; 
+                loader.style.pointerEvents = "none"; 
+            }, 1500);
+        }
+        startQrisTimer();
+    };
+
+    function startQrisTimer() {
+        let timeLeft = 300;
+        const timerDisplay = document.getElementById('qris-timer');
+        if (qrisCountdown) clearInterval(qrisCountdown);
+        qrisCountdown = setInterval(() => {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            if (timerDisplay) timerDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            if (timeLeft <= 0) {
+                clearInterval(qrisCountdown);
+                qrisModal.classList.add('hidden');
+                alert("Waktu pembayaran habis.");
+            }
+            timeLeft--;
+        }, 1000);
+    }
+
+    window.simulatePaymentSuccess = function() {
+        clearInterval(qrisCountdown);
+        const container = document.getElementById('qris-container');
+        if (container) {
+            container.innerHTML = `
+                <div class="py-10 text-center">
+                    <i class="fa-solid fa-circle-check text-7xl text-green-500 animate-bounce"></i>
+                    <h2 class="font-bold text-2xl mt-6">Pembayaran Berhasil!</h2>
+                    <p class="text-slate-500 text-sm mt-2">Pesanan Tuan sedang kami proses.</p>
+                    <button onclick="location.reload()" class="mt-8 px-10 py-3 bg-green-600 text-white rounded-2xl font-bold">Selesai</button>
+                </div>`;
+        }
+        cart = [];
+        saveCart();
+        updateCartCount();
+    };
+
+    // --- 5. VISUAL EFFECTS & RECOMMENDATION ---
+    
+    document.addEventListener('mousemove', (e) => {
+        if (treeImg) {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.015;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.015;
+            treeImg.style.transform = `translate(${moveX}px, ${moveY}px) rotate(-5deg)`;
+        }
     });
 
-    // 2. LOGIKA MODAL PEMBAYARAN QRIS
-    window.openPayment = function(product, price) {
-        const modal = document.getElementById('payment-modal');
-        document.getElementById('checkout-product').innerText = product;
-        document.getElementById('checkout-price').innerText = "Rp " + price.toLocaleString('id-ID');
-        
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-    };
+    function updateRecommendation() {
+        const recBox = document.getElementById("recommendation");
+        if (!recBox) return;
+        const namesInCart = cart.map(item => item.name);
+        let advice = "Tuan, yuk mulai hidup sehat dengan produk Keloravita!";
+        if (namesInCart.length > 0) {
+            if (namesInCart.includes('Morigin') && !namesInCart.includes('Stik Mori')) advice = "Saran BABU JODIE: <b>Stik Mori</b> pas untuk teman ngemil Tuan!";
+            else if (namesInCart.length >= 3) advice = "Pilihan cerdas! Segera Checkout untuk klaim bonusnya.";
+        }
+        recBox.innerHTML = `<i class="fa-solid fa-lightbulb animate-pulse mr-3 text-yellow-500"></i> ${advice}`;
+    }
 
-    window.closePayment = function() {
-        const modal = document.getElementById('payment-modal');
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    };
+    function showStatus(text) {
+        const statusText = document.getElementById("status-text");
+        if (!orderStatus || !statusText) return;
+        statusText.innerText = text;
+        orderStatus.classList.remove('hidden');
+        setTimeout(() => orderStatus.classList.add('hidden'), 3000);
+    }
 
-    // 3. SIMULASI PEMBAYARAN BERHASIL (INTERAKSI KHUSUS)
-    window.simulateSuccess = function() {
-        const modalContent = document.querySelector('#payment-modal > div');
-        
-        // Ganti isi modal dengan animasi sukses
-        modalContent.innerHTML = `
-            <div class="py-10 animate-bounce">
-                <i class="fa-solid fa-circle-check text-8xl text-green-500 mb-6"></i>
-                <h2 class="text-2xl font-bold text-slate-800">Pembayaran Berhasil!</h2>
-                <p class="mt-4 text-slate-500 leading-relaxed">Terima kasih Tuan!<br>Produk <b>Morigin</b> sedang kami siapkan untuk dikirim.</p>
-                <button onclick="location.reload()" class="mt-8 bg-green-600 text-white px-10 py-3 rounded-2xl font-bold hover:bg-green-700 transition">Selesai</button>
-            </div>
-        `;
-
-        // Tambahkan efek konfeti sederhana jika Tuan mau (opsional)
-        console.log("Status: Payment Settled. Triggering Growth Animation.");
-    };
+    // --- INITIAL RUN ---
+    updateCartCount();
+    renderCart();
+    updateUserUI();
 });
+
+// --- 6. LOGIKA NAVIGASI DROPDOWN ---
+
+window.toggleMenu = function() {
+    const menu = document.getElementById("menu-dropdown");
+    if (menu) menu.classList.toggle("hidden");
+};
+
+document.addEventListener("click", function(e) {
+    const menu = document.getElementById("menu-dropdown");
+    const btn = document.querySelector("[onclick='toggleMenu()']");
+    if (menu && btn && !menu.contains(e.target) && !btn.contains(e.target)) {
+        menu.classList.add("hidden");
+    }
+});
+
+// ==========================
+// SCROLL ANIMATION GLOBAL
+// ==========================
+const sections = document.querySelectorAll(".section");
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+        }
+    });
+}, { threshold: 0.15 });
+
+sections.forEach(sec => observer.observe(sec));
+
+
+// ==========================
+// COUNTER IMPACT (SDGs)
+// ==========================
+function animateCounter(id, target) {
+    let el = document.getElementById(id);
+    if (!el) return;
+    let count = 0;
+
+    let interval = setInterval(() => {
+        count += Math.ceil(target / 50);
+        if (count >= target) {
+            count = target;
+            clearInterval(interval);
+        }
+        el.innerText = count;
+    }, 30);
+}
+
+// trigger saat muncul
+const impactSection = document.getElementById("impact");
+
+if (impactSection) {
+    const obs = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+            animateCounter("counter1", 500);
+            animateCounter("counter2", 1200);
+            animateCounter("counter3", 300);
+            obs.disconnect();
+        }
+    });
+    obs.observe(impactSection);
+}
