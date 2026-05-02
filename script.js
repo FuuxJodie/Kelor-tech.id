@@ -1,6 +1,6 @@
 /* 
    LOGIKA INTERAKSI MORIGIN - EDUCOMMERCE NEXT LEVEL
-   Update: Mandatory Login on Add-to-Cart
+   Update: Mandatory Login, QRIS Simulation, & Global Animations
    Dibuat khusus untuk Tuan oleh BABU JODIE 
 */
 
@@ -15,16 +15,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const orderStatus = document.getElementById('order-status');
     let qrisCountdown;
 
-    // --- 2. AUTH SYSTEM LOGIC ---
+    // --- 2. AUTH SYSTEM LOGIC (GERBANG MASUK) ---
     
     window.openAuth = function() {
-        authModal.classList.remove("hidden");
-        document.body.style.overflow = 'hidden';
+        if(authModal) {
+            authModal.classList.remove("hidden");
+            document.body.style.overflow = 'hidden';
+        }
     };
 
     window.closeAuth = function() {
-        authModal.classList.add("hidden");
-        document.body.style.overflow = 'auto';
+        if(authModal) {
+            authModal.classList.add("hidden");
+            document.body.style.overflow = 'auto';
+        }
     };
 
     window.toggleAuth = function() {
@@ -94,11 +98,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- 3. KERANJANG BELANJA DENGAN GERBANG LOGIN ---
+    // --- 3. KERANJANG BELANJA (LOGIC & UI) ---
     
     window.addToCart = function(name, price) {
         const user = localStorage.getItem("currentUser");
         
+        // Proteksi: Harus login sebelum belanja
         if (!user) {
             alert("Silakan login terlebih dahulu untuk memasukkan produk ke keranjang, Tuan!");
             openAuth();
@@ -151,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
         });
-        totalElement.innerText = `Rp ${total.toLocaleString()}`;
+        if(totalElement) totalElement.innerText = `Rp ${total.toLocaleString()}`;
     }
 
     window.removeFromCart = function(index) {
@@ -161,15 +166,15 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCartCount();
     };
 
-    // --- 4. CHECKOUT & QRIS ---
+    // --- 4. CHECKOUT & QRIS SYSTEM ---
     
     window.openCart = function() {
         renderCart();
-        cartModal.classList.remove('hidden');
+        if(cartModal) cartModal.classList.remove('hidden');
     };
 
     window.closeCart = function() {
-        cartModal.classList.add('hidden');
+        if(cartModal) cartModal.classList.add('hidden');
     };
 
     window.checkout = function() {
@@ -179,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         closeCart();
-        qrisModal.classList.remove('hidden');
+        if(qrisModal) qrisModal.classList.remove('hidden');
         
         const loader = document.getElementById('qris-loader');
         if (loader) {
@@ -193,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function startQrisTimer() {
-        let timeLeft = 300;
+        let timeLeft = 300; // 5 Menit
         const timerDisplay = document.getElementById('qris-timer');
         if (qrisCountdown) clearInterval(qrisCountdown);
         qrisCountdown = setInterval(() => {
@@ -202,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (timerDisplay) timerDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
             if (timeLeft <= 0) {
                 clearInterval(qrisCountdown);
-                qrisModal.classList.add('hidden');
+                if(qrisModal) qrisModal.classList.add('hidden');
                 alert("Waktu pembayaran habis.");
             }
             timeLeft--;
@@ -226,8 +231,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCartCount();
     };
 
-    // --- 5. VISUAL EFFECTS & RECOMMENDATION ---
+    // --- 5. VISUAL EFFECTS & SMART RECOMMENDATION ---
     
+    // Parallax Effect di Hero
     document.addEventListener('mousemove', (e) => {
         if (treeImg) {
             const moveX = (e.clientX - window.innerWidth / 2) * 0.015;
@@ -242,28 +248,33 @@ document.addEventListener('DOMContentLoaded', () => {
         const namesInCart = cart.map(item => item.name);
         let advice = "Tuan, yuk mulai hidup sehat dengan produk Keloravita!";
         if (namesInCart.length > 0) {
-            if (namesInCart.includes('Morigin') && !namesInCart.includes('Stik Mori')) advice = "Saran BABU JODIE: <b>Stik Mori</b> pas untuk teman ngemil Tuan!";
-            else if (namesInCart.length >= 3) advice = "Pilihan cerdas! Segera Checkout untuk klaim bonusnya.";
+            if (namesInCart.includes('Morigin') && !namesInCart.includes('Stik Mori')) {
+                advice = "Saran BABU JODIE: <b>Stik Mori</b> pas untuk teman ngemil Tuan!";
+            } else if (namesInCart.length >= 3) {
+                advice = "Pilihan cerdas! Segera Checkout untuk klaim bonusnya.";
+            }
         }
         recBox.innerHTML = `<i class="fa-solid fa-lightbulb animate-pulse mr-3 text-yellow-500"></i> ${advice}`;
     }
 
     function showStatus(text) {
+        if (!orderStatus) {
+            alert(text);
+            return;
+        }
         const statusText = document.getElementById("status-text");
-        if (!orderStatus || !statusText) return;
-        statusText.innerText = text;
+        if (statusText) statusText.innerText = text;
         orderStatus.classList.remove('hidden');
         setTimeout(() => orderStatus.classList.add('hidden'), 3000);
     }
 
-    // --- INITIAL RUN ---
+    // --- 6. INITIAL RUN ---
     updateCartCount();
     renderCart();
     updateUserUI();
 });
 
-// --- 6. LOGIKA NAVIGASI DROPDOWN ---
-
+// --- 7. NAV DROPDOWN LOGIC ---
 window.toggleMenu = function() {
     const menu = document.getElementById("menu-dropdown");
     if (menu) menu.classList.toggle("hidden");
@@ -277,11 +288,8 @@ document.addEventListener("click", function(e) {
     }
 });
 
-// ==========================
-// SCROLL ANIMATION GLOBAL
-// ==========================
+// --- 8. GLOBAL SCROLL ANIMATION ---
 const sections = document.querySelectorAll(".section");
-
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -292,15 +300,11 @@ const observer = new IntersectionObserver((entries) => {
 
 sections.forEach(sec => observer.observe(sec));
 
-
-// ==========================
-// COUNTER IMPACT (SDGs)
-// ==========================
+// --- 9. COUNTER IMPACT (SDGs) ANIMATION ---
 function animateCounter(id, target) {
     let el = document.getElementById(id);
     if (!el) return;
     let count = 0;
-
     let interval = setInterval(() => {
         count += Math.ceil(target / 50);
         if (count >= target) {
@@ -311,13 +315,11 @@ function animateCounter(id, target) {
     }, 30);
 }
 
-// trigger saat muncul
 const impactSection = document.getElementById("impact");
-
 if (impactSection) {
     const obs = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
-            animateCounter("counter1", 500);
+            animateCounter("counter1", 500); // Target SDGs
             animateCounter("counter2", 1200);
             animateCounter("counter3", 300);
             obs.disconnect();

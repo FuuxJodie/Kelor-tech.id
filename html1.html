@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morigin - Solusi Sehat</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root {
+    --primary: #2ecc71;
+    --dark: #27ae60;
+    --bg: linear-gradient(135deg, #e8fff3, #f5fffa);
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg);
+    overflow-x: hidden;
+}
+
+/* LOGO */
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.logo i {
+    font-size: 2rem;
+    color: var(--primary);
+    animation: pulse 2s infinite;
+}
+
+.logo span {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #1a2a3a;
+}
+
+/* CONTAINER */
+.container {
+    text-align: center;
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* TITLE */
+.title {
+    font-size: 2.5rem;
+    color: var(--primary);
+}
+
+/* DESC */
+.description {
+    max-width: 700px;
+    margin: 20px auto;
+    color: #2c3e50;
+}
+
+/* CARD */
+.card-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+    padding: 25px;
+    border-radius: 20px;
+    min-width: 250px;
+    cursor: pointer;
+    transition: 0.4s;
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-12px) scale(1.05);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* ICON */
+.card i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+/* QRIS BOX */
+.qris-box {
+    margin-top: 40px;
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    display: inline-block;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: 0.4s;
+}
+
+.qris-box:hover {
+    transform: scale(1.05);
+}
+
+/* CTA */
+.btn {
+    margin-top: 30px;
+    padding: 12px 25px;
+    border-radius: 30px;
+    border: none;
+    background: var(--primary);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: var(--dark);
+    transform: scale(1.05);
+}
+
+/* ANIMATION */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* RIPPLE */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    background: rgba(0,0,0,0.2);
+    animation: ripple 0.6s linear;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .title { font-size: 1.8rem; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGO -->
+<div class="logo">
+    <i class="fa-solid fa-leaf"></i>
+    <span>Morigin</span>
+</div>
+
+<div class="container">
+
+    <h1 class="title">Solusi Sehat Modern</h1>
+
+    <p class="description">
+        Menghadirkan kelor dalam bentuk <b>modern, praktis, dan kekinian</b> dengan sistem 
+        digital seperti <b>QRIS cashless</b> dan edukasi gizi berbasis teknologi.
+    </p>
+
+    <div class="card-container">
+
+        <div class="card">
+            <i class="fa-solid fa-leaf" style="color:#27ae60;"></i>
+            <h3>Superfood</h3>
+            <p>Kaya nutrisi & cocok untuk gaya hidup sehat.</p>
+        </div>
+
+        <div class="card">
+            <i class="fa-solid fa-qrcode" style="color:#3498db;"></i>
+            <h3>QRIS Payment</h3>
+            <p>Bayar cepat tanpa ribet, cukup scan.</p>
+        </div>
+
+        <div class="card">
+            <i class="fa-solid fa-graduation-cap" style="color:#e67e22;"></i>
+            <h3>Edukasi Digital</h3>
+            <p>Belajar gizi langsung dari platform.</p>
+        </div>
+
+    </div>
+
+    <!-- QRIS SIMULATION -->
+    <div class="qris-box">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/QRIS_logo.svg" width="120">
+        <p><b>Scan & Pay with QRIS</b></p>
+    </div>
+
+    <!-- CTA -->
+    <button class="btn">Mulai Sekarang 🚀</button>
+
+</div>
+
+<script>
+// Ripple Effect
+document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', function(e){
+        const ripple = document.createElement("span");
+        ripple.classList.add("ripple");
+        this.appendChild(ripple);
+
+        let x = e.clientX - this.offsetLeft;
+        let y = e.clientY - this.offsetTop;
+
+        ripple.style.left = x + "px";
+        ripple.style.top = y + "px";
+
+        setTimeout(() => ripple.remove(), 600);
+    });
+});
+</script>
+
+</body>
+</html>

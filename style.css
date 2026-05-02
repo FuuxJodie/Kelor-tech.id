@@ -4,9 +4,15 @@
 */
 
 :root {
+    /* Color System */
+    --primary: #2ecc71;
+    --dark: #27ae60;
     --mori-green: #064e3b;
     --mori-accent: #22c55e;
     --mori-light: #f1f5f1;
+    --bg-gradient: linear-gradient(135deg, #e8fff3, #f5fffa);
+    
+    /* UI Components */
     --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-border: rgba(255, 255, 255, 0.5);
     --white: #ffffff;
@@ -24,9 +30,16 @@ body {
     color: #1e293b;
     font-family: 'Poppins', sans-serif;
     overflow-x: hidden;
+    line-height: 1.6;
 }
 
-/* --- 2. ANIMASI MESIN (KEYFRAMES) --- */
+/* --- 2. ANIMASI (CORE & INTERACTIVE) --- */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
 @keyframes float-slow {
     0%, 100% { transform: translateY(0) rotate(0deg); }
     50% { transform: translateY(-40px) rotate(20deg); }
@@ -42,15 +55,44 @@ body {
     100% { background-position: -200% 0; }
 }
 
+@keyframes ripple {
+    to { transform: scale(4); opacity: 0; }
+}
+
+@keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+
 .animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
 .animate-float-mid { animation: float-mid 6s ease-in-out infinite; }
 
-/* --- 3. NAVIGASI & HERO --- */
+/* --- 3. LOGO & NAVIGASI --- */
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.logo i {
+    font-size: 2rem;
+    color: var(--primary);
+    animation: pulse 2s infinite;
+}
+
+.logo span {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #1a2a3a;
+}
+
 nav {
     background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 100%);
     transition: all 0.4s ease;
 }
 
+/* --- 4. HERO & LAYOUT --- */
 #home {
     position: relative;
     height: 650px !important;
@@ -61,19 +103,67 @@ nav {
     text-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
-/* --- 4. ULTRA-SMOOTH REVEAL ON SCROLL --- */
-.reveal {
-    opacity: 0;
-    transform: translateY(50px) scale(0.95);
-    transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1); /* Apple-style Bezier */
+.container {
+    text-align: center;
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
 }
 
-.reveal.active {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+/* --- 5. KARTU & EFEK (UNIPIN STYLE) --- */
+.card-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-/* --- 5. SMART RECOMMENDATION BOX --- */
+.card, .unipin-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    padding: 25px;
+    border-radius: 2rem;
+    min-width: 250px;
+    cursor: pointer;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover, .unipin-card:hover, .card-hover:hover {
+    border-color: var(--mori-accent) !important;
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(34, 197, 94, 0.3);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* Ripple Effect Element */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    background: rgba(0,0,0,0.1);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+/* --- 6. QRIS & PAYMENT UI --- */
+.qris-box {
+    margin-top: 40px;
+    background: var(--white);
+    padding: 20px;
+    border-radius: 20px;
+    display: inline-block;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: 0.4s;
+}
+
+.qris-box:hover {
+    transform: scale(1.05);
+}
+
 #recommendation {
     transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     background: linear-gradient(90deg, #f0fdf4 0%, #dcfce7 50%, #f0fdf4 100%);
@@ -82,56 +172,56 @@ nav {
     border: 1px solid rgba(34, 197, 94, 0.2);
 }
 
-/* --- 6. GLASSMORPHISM & KARTU (UNIPIN STYLE) --- */
-.unipin-card {
-    background: var(--glass-bg) !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border) !important;
-    border-radius: 2rem;
-    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+/* --- 7. MASALAH NYATA (INTERAKTIF) --- */
+.masalah-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
-.unipin-card:hover {
-    border-color: var(--mori-accent) !important;
-    transform: translateY(-12px) scale(1.02);
-    box-shadow: 0 25px 50px -12px rgba(34, 197, 94, 0.3);
-    background: rgba(255, 255, 255, 0.9) !important;
-}
-
-/* --- 7. QRIS MODAL & UI SIMULATION --- */
-#qris-modal {
-    transition: all 0.5s ease-in-out;
-}
-
-#qris-modal:not(.hidden) #qris-container {
-    transform: scale(1);
-}
-
-#qris-loader {
-    backdrop-filter: blur(4px);
-    transition: opacity 1s ease;
-}
-
-/* --- 8. EDUKASI SECTION --- */
-#edukasi {
+.masalah-card {
     position: relative;
-    border-top: 1px solid var(--glass-border);
-    border-bottom: 1px solid var(--glass-border);
+    border-radius: 2rem;
+    overflow: hidden;
+    cursor: pointer;
+    height: 320px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
 }
 
-#edukasi a {
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+.masalah-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
 }
 
-#edukasi a:hover {
-    transform: translateY(-8px);
+.masalah-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.4), transparent);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 30px;
+    text-align: left;
 }
 
-/* --- 9. SCROLLBAR & MODAL CUSTOM --- */
-#cart-modal .bg-white {
-    backdrop-filter: blur(20px);
-    background: rgba(255, 255, 255, 0.95);
+.masalah-card:hover img { transform: scale(1.1); }
+.masalah-card:hover .masalah-overlay p {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- 8. UTILITIES & SCROLLBAR --- */
+.gradient-text {
+    background: linear-gradient(to right, #22c55e, #16a34a);
+    -webkit-background-clip: text;
+    color: transparent;
+    font-weight: 700;
 }
 
 ::-webkit-scrollbar {
@@ -147,60 +237,39 @@ nav {
     border-radius: 10px;
 }
 
-/* --- 10. TAMBAHAN FITUR PREMIUM TUAN --- */
-
-/* ===== SECTION TRANSITION ===== */
 .section {
     opacity: 0;
     transform: translateY(60px);
     transition: all 0.8s ease;
 }
 
-.section.show {
+.section.show, .reveal.active {
     opacity: 1;
     transform: translateY(0);
 }
 
-/* ===== HOVER CARD PREMIUM ===== */
-.card-hover {
-    transition: all 0.4s ease;
+/* --- 9. CTA & BUTTONS --- */
+.btn, .cta-btn-masalah {
+    background: var(--mori-accent);
+    color: white;
+    padding: 12px 32px;
+    border-radius: 50px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(34, 197, 94, 0.2);
 }
 
-.card-hover:hover {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+.btn:hover, .cta-btn-masalah:hover {
+    background: var(--dark);
+    transform: scale(1.05) translateY(-3px);
+    box-shadow: 0 15px 25px rgba(22, 163, 74, 0.4);
 }
 
-/* ===== GRADIENT TEXT ===== */
-.gradient-text {
-    background: linear-gradient(to right, #22c55e, #16a34a);
-    -webkit-background-clip: text;
-    color: transparent;
-}
-
-/* ===== CTA INPUT ===== */
-input:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px #22c55e;
-}
-
-/* --- 11. RESPONSIVE & KEYFRAMES --- */
+/* --- 10. RESPONSIVE --- */
 @media (max-width: 768px) {
     #home { height: auto !important; padding-bottom: 4rem; }
+    .title { font-size: 1.8rem; }
     .unipin-card { padding: 1.5rem; }
-}
-
-#menu-dropdown {
-    animation: fadeSlide 0.3s ease;
-}
-
-@keyframes fadeSlide {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
